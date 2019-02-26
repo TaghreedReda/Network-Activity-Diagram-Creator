@@ -28,6 +28,26 @@ function setup()
 
 
 
+function node (number)
+{
+ this.name;
+ this.appendicesNum=number;
+ this.es; //early start
+ this.ef; //early finish
+ this.ls; //last start
+ this.lf; //last finish
+ this.critical=false; //0 or 1 
+ this.v1=this.ls-this.es;
+ this.v2=this.lf-this.ef;
+
+ if (this.v1==this.v2==0)
+ {
+   this.critical=true;
+ }
+ this.appendices=[number];
+
+
+}
 
 function draw()
 {
