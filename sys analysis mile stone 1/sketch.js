@@ -1,6 +1,8 @@
-
-
-var nameP , durationV ,nameV,durationP,appendicesV,appendicesP;
+//p for position .. v for value 
+var nameP , durationV ,nameV,durationP;// name and duration
+var newbutton,finishbutton;
+var appendicesV,appendicesP; //appendices
+var activites=[]; 
 
 function setup() 
 {
@@ -22,35 +24,69 @@ function setup()
   appendicesP.position(10,125);
   appendicesV=createInput();
   appendicesV.position(188,145);
+  
+  newbutton=createButton('New');
+  newbutton.position(30+80,185);
+  newbutton.mousePressed(createActivity);
 
+  finishbutton=createButton('Finish');
+  finishbutton.position(90+80,185);
 
 }
 
-
-
-function node (number)
+function createActivity()
 {
- this.name;
- this.appendicesNum=number;
+    var activity=new Activity(noV.value(),nameV.value(),durationV.value(),appendicesV.value());
+    activites.push(activity);
+
+}
+
+function Activity (apNumber,activityName,activityDur,appendicesNames)
+{
+ this.name=activityName;
+ this.duration=activityDur;
+ this.appendicesNum=apNumber;
  this.es; //early start
  this.ef; //early finish
  this.ls; //last start
  this.lf; //last finish
  this.critical=false; //0 or 1 
- this.v1=this.ls-this.es;
- this.v2=this.lf-this.ef;
+ this.v1;
+ this.v2;
 
- if (this.v1==this.v2==0)
- {
-   this.critical=true;
+ this.appendicesNames=[apNumber];
+ 
+ for (var i=0 ;i<apNumber ;i++){
+      if (appendicesNames[i]!=',')
+           appendices.push(appendicesNames[i]);
+
  }
- this.appendices=[number];
-
-
 }
+
+//start vertices
+var startx=20,starty=180;
+//custom vertices
+var custX=startx+150 , custY=starty;
 
 function draw()
 {
  background(255); 
 
+ fill (100,100,100);
+ rect(startx,starty,120,40);
+
+ fill(255);
+ textSize(14);
+ text("START",startx+40 ,starty+15,20,20);
+
+for (var j=0 ; j<activites.length;j++){
+    fill(200,100,150);
+    rect(custX, custY, 120, 40);
+  
+    fill(255);
+    textSize(20);
+    text(activites[j].name,custX+20 ,custY+15,20,20);
+    text(activites[j].duration,custX+80 ,custY+15,20,20);
+  
+}
 }
