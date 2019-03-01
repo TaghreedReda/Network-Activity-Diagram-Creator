@@ -24,7 +24,7 @@ function setup()
   appendicesP.position(10,125);
   appendicesV=createInput();
   appendicesV.position(188,145);
-  
+
   newbutton=createButton('New');
   newbutton.position(30+80,185);
   newbutton.mousePressed(createActivity);
@@ -36,16 +36,16 @@ function setup()
 
 function createActivity()
 {
-    var activity=new Activity(noV.value(),nameV.value(),durationV.value(),appendicesV.value());
+    var activity=new Activity(nameV.value(),durationV.value(),appendicesV.value());
     activites.push(activity);
 
 }
 
-function Activity (apNumber,activityName,activityDur,appendicesNames)
+function Activity (activityName,activityDur,appendicesNames)
 {
  this.name=activityName;
  this.duration=activityDur;
- this.appendicesNum=apNumber;
+ 
  this.es; //early start
  this.ef; //early finish
  this.ls; //last start
@@ -54,11 +54,11 @@ function Activity (apNumber,activityName,activityDur,appendicesNames)
  this.v1;
  this.v2;
 
- this.appendicesNames=[apNumber];
+ this.appendices=[];
  
- for (var i=0 ;i<apNumber ;i++){
+ for (var i=0 ;i<appendicesNames.length;i++){
       if (appendicesNames[i]!=',')
-           appendices.push(appendicesNames[i]);
+           this.appendices.push(appendicesNames[i]);
 
  }
 }
