@@ -1,8 +1,15 @@
 //p for position .. v for value 
-var nameP , durationV ,nameV,durationP;// name and duration
-var newbutton,finishbutton;
-var appendicesV,appendicesP; //appendices
+// name and duration
+var nameP , durationV ,nameV,durationP;
+//appendices
+var appendicesV,appendicesP;
+//main array
 var activites=[]; 
+//buttons
+var newbutton,finishbutton;
+var startx=20,starty=230;
+var start;
+var currentActivity;
 
 function setup() 
 {
@@ -24,6 +31,11 @@ function setup()
   appendicesP.position(10,125);
   appendicesV=createInput();
   appendicesV.position(188,145);
+	
+	//start
+	start=new Activity('Start','0','0');
+	activites.push(start);
+										 
 
   newbutton=createButton('New');
   newbutton.position(30+80,185);
@@ -43,6 +55,7 @@ function createActivity()
 
 function Activity (activityName,activityDur,appendicesNames)
 {
+	
  this.name=activityName;
  this.duration=activityDur;
  
@@ -56,6 +69,8 @@ function Activity (activityName,activityDur,appendicesNames)
 
  this.height=40;
  this.width=120;
+ this.x= startx+150;
+ this.y= starty;
 
  this.next=[];
  this.previous=[];
@@ -63,39 +78,74 @@ function Activity (activityName,activityDur,appendicesNames)
  for (var i=0 ;i<appendicesNames.length;i++){
       if (appendicesNames[i]!=',')
            this.previous.push(appendicesNames[i]);
-
  }
-
-
-
 
 }
 
-//start vertices
-var startx=20,starty=180;
-//custom vertices
-var custX=startx+150 , custY=starty;
+function mousePressed() {	
+		currentActivity=-1;
+		for (var i=activites.length-1 ;i>=0;i--){
+			if(mouseX > activites[i].x  && mouseX <activites[i].x + activites[i].width && 
+      mouseY > activites[i].y  && mouseY < activites[i].y + activites[i].height){
+			     currentActivity=i;
+				 break;
+  } 
+  }
+		
+	}
+	
+function mouseDragged() {	
+    activites[currentActivity].x = mouseX- 60; 
+   activites[currentActivity].y = mouseY- 20;
+	
+	}
 
 function draw()
 {
  background(255); 
 
- fill (100,100,100);
- rect(startx,starty,120,40);
-
- fill(255);
- textSize(14);
- text("START",startx+40 ,starty+15,20,20);
-
+		
+for (var k=1 ;k<activites.length;k++){
+	if(activites[k].previous.length==0){
+		 fill(125,220,31);
+  line(activites[k].x + activites[k].width /2,activites[k].y + activites[k].height/2,activites[0].x + activites[0].width/2,activites[0].y + activites[0].height /2);
+	}
+	if (activites[k].previous.length!=0) {
+		for (var l=0;l<activites[k].previous.length;l++){
+			   for (var z=1 ;z<activites.length;z++){
+					 if (activites[k].previous[l]==activites[z].name[0]){
+						  fill(125,220,31);
+  line(activites[k].x + activites[k].width /2,activites[k].y + activites[k].height/2,activites[z].x + activites[z].width/2,activites[z].y + activites[z].height /2);
+	
+					 }
+				 }
+			
+		}
+	}
+}	
 for (var j=0 ; j<activites.length;j++)
 {
+	if(j==0){	
+	//drawing the start
+ fill (100,100,100);
+	activites[j].x =startx;	
+ rect(activites[j].x, activites[j].y, activites[j].width, activites[j].height);
+ fill(255);
+ textSize(14);
+ text("START",activites[j].x+40 ,activites[j].y+15,20,20);
+	}
+	else 
+	{
     fill(200,100,150);
-    rect(custX, custY, activites[j].width, activites[j].height);
+    rect(activites[j].x, activites[j].y, activites[j].width, activites[j].height);
   
     fill(255);
     textSize(20);
-    text(activites[j].name,custX+20 ,custY+15,20,20);
-    text(activites[j].duration,custX+80 ,custY+15,20,20);
-  
+
+	  text(activites[j].name,activites[j].x+20 ,activites[j].y+15,20,20);
+    text(activites[j].duration,activites[j].x+80 ,activites[j].y+15,20,20);
 }
+}
+
+
 }
