@@ -74,11 +74,22 @@ function Activity (activityName,activityDur,appendicesNames)
 
  this.next=[];
  this.previous=[];
- 
+ //previous setting
  for (var i=0 ;i<appendicesNames.length;i++){
       if (appendicesNames[i]!=',')
            this.previous.push(appendicesNames[i]);
  }
+	
+	for (var j=0 ;j<appendicesNames.length;j++){
+      if (appendicesNames[j]!=','){
+						
+        for (var k=1 ;k<activites.length;k++){
+					if (activites[k].name[0]==appendicesNames[j]){
+						activites[k].next.push(this.name);
+					}
+				}
+			}
+	}
 
 }
 
@@ -110,6 +121,7 @@ for (var k=1 ;k<activites.length;k++){
 		 fill(125,220,31);
   line(activites[k].x + activites[k].width /2,activites[k].y + activites[k].height/2,activites[0].x + activites[0].width/2,activites[0].y + activites[0].height /2);
 	}
+	
 	if (activites[k].previous.length!=0) {
 		for (var l=0;l<activites[k].previous.length;l++){
 			   for (var z=1 ;z<activites.length;z++){
@@ -123,6 +135,22 @@ for (var k=1 ;k<activites.length;k++){
 		}
 	}
 }	
+	
+for (var h=1 ;h<activites.length;h++){
+	if (activites[h].next.length!=0) {
+		for (var n=0; n<activites[h].next.length ; n++){
+			for (var v=1 ;v<activites.length;v++){
+					 if (activites[h].next[n]==activites[v].name[0]){
+						  fill(125,220,31);
+ line(activites[h].x + activites[h].width /2,activites[h].y + activites[h].height/2,activites[v].x +activites[v].width/2,activites[v].y + activites[v].height /2);			 
+					 }
+			}
+	}
+	
+}	
+	
+}	
+	
 for (var j=0 ; j<activites.length;j++)
 {
 	if(j==0){	
