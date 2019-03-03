@@ -54,13 +54,21 @@ function Activity (activityName,activityDur,appendicesNames)
  this.v1;
  this.v2;
 
- this.appendices=[];
+ this.height=40;
+ this.width=120;
+
+ this.next=[];
+ this.previous=[];
  
  for (var i=0 ;i<appendicesNames.length;i++){
       if (appendicesNames[i]!=',')
-           this.appendices.push(appendicesNames[i]);
+           this.previous.push(appendicesNames[i]);
 
  }
+
+
+
+
 }
 
 //start vertices
@@ -79,9 +87,10 @@ function draw()
  textSize(14);
  text("START",startx+40 ,starty+15,20,20);
 
-for (var j=0 ; j<activites.length;j++){
+for (var j=0 ; j<activites.length;j++)
+{
     fill(200,100,150);
-    rect(custX, custY, 120, 40);
+    rect(custX, custY, activites[j].width, activites[j].height);
   
     fill(255);
     textSize(20);
