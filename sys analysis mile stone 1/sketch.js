@@ -9,7 +9,9 @@ var activites=[];
 var newbutton,finishbutton;
 var startx=20,starty=230;
 var start;
+var finish;
 var currentActivity;
+var mintime=0;
 
 function setup() 
 {
@@ -33,8 +35,10 @@ function setup()
   appendicesV.position(188,145);
 	
 	//start
-	start=new Activity('Start','0','0');
+	start=new Activity("Start",0,'0');
 	activites.push(start);
+	activites[0].x =startx;	
+	finish=new Activity("Finish",101010,'0');
 										 
 
   newbutton=createButton('New');
@@ -43,13 +47,51 @@ function setup()
 
   finishbutton=createButton('Finish');
   finishbutton.position(90+80,185);
+  finishbutton.mousePressed(finishSetting);
 
+}
+
+function finishSetting ()
+{
+	 newbutton.hide();
+	activites.push(finish);
+	activites[activites.length-1].y =starty+200;
+
+	//setting es and ef
+	for (var i=1;i<activites.length-1;i++){
+		if (activites[i].previous.length==0){
+       activites[i].es=0;
+			 
+	}
+		else {
+			var min =100000000;
+			for (var j=0 ; j<activites[i].previous.length;j++){
+				for (var k=1;k<activites.length-1;k++){
+					
+			    if (activites[k].name[0]== activites[i].previous[j]){
+						if(activites[k].ef<=min){
+							min=activites[k].ef;
+					}
+				}
+				}	
+		}
+			activites[i].es+=min;
+			
+		}
+		activites[i].ef =(activites[i].es + activites[i].duration);
+		mintime+=activites[i].ef;
+		
+	 
+	 
+}
 }
 
 function createActivity()
 {
-    var activity=new Activity(nameV.value(),durationV.value(),appendicesV.value());
+	 var d= parseInt(durationV.value(),10);
+    var activity=new Activity(nameV.value(),d,appendicesV.value());
     activites.push(activity);
+	
 
 }
 
@@ -58,14 +100,14 @@ function Activity (activityName,activityDur,appendicesNames)
 	
  this.name=activityName;
  this.duration=activityDur;
- 
- this.es; //early start
- this.ef; //early finish
- this.ls; //last start
- this.lf; //last finish
+	
+ this.es=0 ; //early start
+ this.ef=0; //early finish
+ this.ls=0; //last start
+ this.lf=0; //last finish
  this.critical=false; //0 or 1 
- this.v1;
- this.v2;
+ this.v1=0;
+ this.v2=0;
 
  this.height=40;
  this.width=120;
@@ -79,17 +121,18 @@ function Activity (activityName,activityDur,appendicesNames)
       if (appendicesNames[i]!=',')
            this.previous.push(appendicesNames[i]);
  }
-	
-	for (var j=0 ;j<appendicesNames.length;j++){
-      if (appendicesNames[j]!=','){
-						
-        for (var k=1 ;k<activites.length;k++){
-					if (activites[k].name[0]==appendicesNames[j]){
-						activites[k].next.push(this.name);
-					}
-				}
+	//next setting 
+	//y3dy 3la kol prev bta3 kol activ etrsm lw l2a esmo hwa y7ot fl next esm el activity
+
+	for (var k=1; k<activites.length;k++){
+		for (var e=0 ;e<activites[k].previous.length;e++){
+			if(activites[k].previous[e]==this.name){
+				this.next.push(activites[k].name);
+				break;
 			}
+		}
 	}
+			 
 
 }
 
@@ -115,7 +158,7 @@ function draw()
 {
  background(255); 
 
-		
+		//connecting to prev.
 for (var k=1 ;k<activites.length;k++){
 	if(activites[k].previous.length==0){
 		 fill(125,220,31);
@@ -136,7 +179,13 @@ for (var k=1 ;k<activites.length;k++){
 	}
 }	
 	
+	//connecting to next.
 for (var h=1 ;h<activites.length;h++){
+	if(activites[h].next.length==0 &&  activites[activites.length -1].duration==101010){
+		 fill(125,220,31);
+  line(activites[h].x + activites[h].width /2,activites[h].y + activites[h].height/2,activites[activites.length -1].x + activites[activites.length -1].width/2,activites[activites.length -1].y + activites[activites.length -1].height /2);
+	}
+	
 	if (activites[h].next.length!=0) {
 		for (var n=0; n<activites[h].next.length ; n++){
 			for (var v=1 ;v<activites.length;v++){
@@ -148,19 +197,30 @@ for (var h=1 ;h<activites.length;h++){
 	}
 	
 }	
-	
 }	
 	
+//drawing loop	
 for (var j=0 ; j<activites.length;j++)
 {
-	if(j==0){	
+	if(j==0 ){	
 	//drawing the start
  fill (100,100,100);
-	activites[j].x =startx;	
+
  rect(activites[j].x, activites[j].y, activites[j].width, activites[j].height);
  fill(255);
  textSize(14);
  text("START",activites[j].x+40 ,activites[j].y+15,20,20);
+	}
+	
+	//drawing finish
+	else if (j== activites.length-1 && activites[j].duration==101010){
+		 fill (100,100,100);
+		
+		rect(activites[j].x, activites[j].y, activites[j].width, activites[j].height);
+ fill(255);
+ textSize(14);
+		text("FINISH",activites[j].x+40 ,activites[j].y+15,20,20);
+
 	}
 	else 
 	{
