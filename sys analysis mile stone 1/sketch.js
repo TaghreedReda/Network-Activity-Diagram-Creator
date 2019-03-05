@@ -50,13 +50,8 @@ function setup()
   finishbutton.mousePressed(finishSetting);
 
 }
-
-function finishSetting ()
-{
-	 newbutton.hide();
-	activites.push(finish);
-	activites[activites.length-1].y =starty+200;
-
+function settingMinTime(){
+  
 	//setting es and ef
 	for (var i=1;i<activites.length-1;i++){
 		if (activites[i].previous.length==0){
@@ -80,10 +75,30 @@ function finishSetting ()
 		}
 		activites[i].ef =(activites[i].es + activites[i].duration);
 		mintime+=activites[i].ef;
-		
-	 
-	 
+  }
 }
+
+function finishSetting ()
+{
+	 newbutton.hide();
+	activites.push(finish);
+	activites[activites.length-1].y =starty+200;
+
+//set all nexts		
+	 //next setting 
+	//y3dy 3la kol prev bta3 kol activ etrsm lw l2a esmo hwa y7ot fl next esm el activity
+for (var i=1 ; i<activites.length;i++){
+	for (var k=1; k<activites.length;k++){
+		for (var e=0 ;e<activites[k].previous.length;e++){
+			if(activites[k].previous[e]==activites[i].name){
+				activites[i].next.push(activites[k].name);
+				break;
+			}
+		}
+	}
+}
+	 
+
 }
 
 function createActivity()
@@ -91,7 +106,6 @@ function createActivity()
 	 var d= parseInt(durationV.value(),10);
     var activity=new Activity(nameV.value(),d,appendicesV.value());
     activites.push(activity);
-	
 
 }
 
@@ -121,17 +135,7 @@ function Activity (activityName,activityDur,appendicesNames)
       if (appendicesNames[i]!=',')
            this.previous.push(appendicesNames[i]);
  }
-	//next setting 
-	//y3dy 3la kol prev bta3 kol activ etrsm lw l2a esmo hwa y7ot fl next esm el activity
-
-	for (var k=1; k<activites.length;k++){
-		for (var e=0 ;e<activites[k].previous.length;e++){
-			if(activites[k].previous[e]==this.name){
-				this.next.push(activites[k].name);
-				break;
-			}
-		}
-	}
+	
 			 
 
 }
