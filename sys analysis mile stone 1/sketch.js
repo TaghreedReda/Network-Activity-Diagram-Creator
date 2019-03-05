@@ -59,23 +59,25 @@ function settingMinTime(){
 			 
 	}
 		else {
-			var min =100000000;
+			var max=0;
 			for (var j=0 ; j<activites[i].previous.length;j++){
 				for (var k=1;k<activites.length-1;k++){
 					
 			    if (activites[k].name[0]== activites[i].previous[j]){
-						if(activites[k].ef<=min){
-							min=activites[k].ef;
+						if(activites[k].ef>=max){
+							max=activites[k].ef;
 					}
 				}
 				}	
 		}
-			activites[i].es+=min;
+			activites[i].es = max;
 			
 		}
 		activites[i].ef =(activites[i].es + activites[i].duration);
-		mintime+=activites[i].ef;
+		mintime = activites[i].ef;
+    
   }
+  console.log (mintime);
 }
 
 function finishSetting ()
@@ -98,7 +100,7 @@ for (var i=1 ; i<activites.length;i++){
 	}
 }
 	 
-
+settingMinTime();
 }
 
 function createActivity()
