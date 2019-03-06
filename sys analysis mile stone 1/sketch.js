@@ -13,9 +13,10 @@ var finish;
 var currentActivity;
 var mintime=0;
 
+
 function setup() 
 {
-  createCanvas(800,800);
+  createCanvas(1000,800);
   //1-name
   nameP=createElement('h3', 'Activity Name : ');
   nameP.position(10,45);
@@ -50,6 +51,39 @@ function setup()
   finishbutton.mousePressed(finishSetting);
 
 }
+function findCP(){
+  	for (var i=activites.length-2;i>=0;i--){
+		if (activites[i].next.length==0){
+       activites[i].lf=activites[i].ef;   
+	}
+		else {
+			var min=100000000;
+			for (var j=0 ; j<activites[i].next.length;j++){
+				for (var k=1;k<activites.length-1;k++){
+					
+			    if (activites[k].name == activites[i].next[j]){
+						if(activites[k].ls <= min){
+							min=activites[k].ls;
+					}
+				}
+				}	
+		}
+			activites[i].lf = min;
+			
+		}
+      
+		activites[i].ls = activites[i].lf - activites[i].duration;
+  
+    activites[i].v1=activites[i].ls-activites[i].es;
+    activites[i].v2=activites[i].lf-activites[i].ef;
+       console.log(activites[i].name+ " " + activites[i].ls + " " +activites[i].lf );
+    if ( activites[i].v1==0 &&  activites[i].v2==0){
+       activites[i].critical=1;
+      console.log("critical  " + activites[i].name);
+    }
+      
+  }
+}
 function settingMinTime(){
   
 	//setting es and ef
@@ -63,7 +97,7 @@ function settingMinTime(){
 			for (var j=0 ; j<activites[i].previous.length;j++){
 				for (var k=1;k<activites.length-1;k++){
 					
-			    if (activites[k].name[0]== activites[i].previous[j]){
+			    if (activites[k].name== activites[i].previous[j]){
 						if(activites[k].ef>=max){
 							max=activites[k].ef;
 					}
@@ -89,11 +123,13 @@ function finishSetting ()
 //set all nexts		
 	 //next setting 
 	//y3dy 3la kol prev bta3 kol activ etrsm lw l2a esmo hwa y7ot fl next esm el activity
-for (var i=1 ; i<activites.length;i++){
-	for (var k=1; k<activites.length;k++){
+for (var i=1 ; i<activites.length-1;i++){
+  console.log(activites[i].name+" has");
+	for (var k=1; k<activites.length-1;k++){
 		for (var e=0 ;e<activites[k].previous.length;e++){
 			if(activites[k].previous[e]==activites[i].name){
 				activites[i].next.push(activites[k].name);
+        console.log(activites[k].name);
 				break;
 			}
 		}
@@ -101,6 +137,7 @@ for (var i=1 ; i<activites.length;i++){
 }
 	 
 settingMinTime();
+  findCP();
 }
 
 function createActivity()
@@ -121,7 +158,7 @@ function Activity (activityName,activityDur,appendicesNames)
  this.ef=0; //early finish
  this.ls=0; //last start
  this.lf=0; //last finish
- this.critical=false; //0 or 1 
+ this.critical=0; //0 or 1 
  this.v1=0;
  this.v2=0;
 
@@ -133,12 +170,11 @@ function Activity (activityName,activityDur,appendicesNames)
  this.next=[];
  this.previous=[];
  //previous setting
+  
  for (var i=0 ;i<appendicesNames.length;i++){
       if (appendicesNames[i]!=',')
            this.previous.push(appendicesNames[i]);
- }
-	
-			 
+ }	 
 
 }
 
@@ -165,6 +201,7 @@ function draw()
  background(255); 
 
 		//connecting to prev.
+  
 for (var k=1 ;k<activites.length;k++){
 	if(activites[k].previous.length==0){
 		 fill(125,220,31);
@@ -174,7 +211,7 @@ for (var k=1 ;k<activites.length;k++){
 	if (activites[k].previous.length!=0) {
 		for (var l=0;l<activites[k].previous.length;l++){
 			   for (var z=1 ;z<activites.length;z++){
-					 if (activites[k].previous[l]==activites[z].name[0]){
+					 if (activites[k].previous[l]==activites[z].name){
 						  fill(125,220,31);
   line(activites[k].x + activites[k].width /2,activites[k].y + activites[k].height/2,activites[z].x + activites[z].width/2,activites[z].y + activites[z].height /2);
 	
@@ -184,9 +221,9 @@ for (var k=1 ;k<activites.length;k++){
 		}
 	}
 }	
-	
+
 	//connecting to next.
-for (var h=1 ;h<activites.length;h++){
+for (var h=1 ;h<activites.length-1;h++){
 	if(activites[h].next.length==0 &&  activites[activites.length -1].duration==101010){
 		 fill(125,220,31);
   line(activites[h].x + activites[h].width /2,activites[h].y + activites[h].height/2,activites[activites.length -1].x + activites[activites.length -1].width/2,activites[activites.length -1].y + activites[activites.length -1].height /2);
@@ -195,7 +232,7 @@ for (var h=1 ;h<activites.length;h++){
 	if (activites[h].next.length!=0) {
 		for (var n=0; n<activites[h].next.length ; n++){
 			for (var v=1 ;v<activites.length;v++){
-					 if (activites[h].next[n]==activites[v].name[0]){
+					 if (activites[h].next[n]==activites[v].name){
 						  fill(125,220,31);
  line(activites[h].x + activites[h].width /2,activites[h].y + activites[h].height/2,activites[v].x +activites[v].width/2,activites[v].y + activites[v].height /2);			 
 					 }
@@ -204,7 +241,14 @@ for (var h=1 ;h<activites.length;h++){
 	
 }	
 }	
-	
+
+  
+  
+  
+  
+  
+  
+  
 //drawing loop	
 for (var j=0 ; j<activites.length;j++)
 {
@@ -227,13 +271,24 @@ for (var j=0 ; j<activites.length;j++)
  textSize(14);
 		text("FINISH",activites[j].x+40 ,activites[j].y+15,20,20);
 
+    
+    
 	}
 	else 
 	{
-    fill(200,100,150);
+    if(activites[j].critical==1)
+    fill(88,1,67);
+    else 
+      fill(255,255,255);
+       
     rect(activites[j].x, activites[j].y, activites[j].width, activites[j].height);
   
+    
+    if (activites[j].critical==1)
     fill(255);
+    else
+       fill(88,1,67);
+      
     textSize(20);
 
 	  text(activites[j].name,activites[j].x+20 ,activites[j].y+15,20,20);
