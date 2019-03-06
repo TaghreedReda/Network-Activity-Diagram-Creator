@@ -52,7 +52,7 @@ function setup()
 
 }
 function findCP(){
-  	for (var i=activites.length-2;i>=0;i--){
+  	for (var i=activites.length-2;i>=1;i--){
 		if (activites[i].next.length==0){
        activites[i].lf=activites[i].ef;   
 	}
@@ -84,7 +84,7 @@ function findCP(){
       
   }
 }
-function settingMinTime(){
+function settMinTime(){
   
 	//setting es and ef
 	for (var i=1;i<activites.length-1;i++){
@@ -113,7 +113,6 @@ function settingMinTime(){
   }
   console.log (mintime);
 }
-
 function finishSetting ()
 {
 	 newbutton.hide();
@@ -136,10 +135,9 @@ for (var i=1 ; i<activites.length-1;i++){
 	}
 }
 	 
-settingMinTime();
+settMinTime();
   findCP();
 }
-
 function createActivity()
 {
 	 var d= parseInt(durationV.value(),10);
@@ -147,7 +145,6 @@ function createActivity()
     activites.push(activity);
 
 }
-
 function Activity (activityName,activityDur,appendicesNames)
 {
 	
