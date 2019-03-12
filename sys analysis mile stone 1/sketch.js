@@ -179,7 +179,7 @@ function mousePressed() {
 		currentActivity=-1;
 		for (var i=activites.length-1 ;i>=0;i--){
 			if(mouseX > activites[i].x  && mouseX <activites[i].x + activites[i].width && 
-      mouseY > activites[i].y  && mouseY < activites[i].y + activites[i].height){
+      mouseY > activites[i].y  && mouseY < activites[i].y + (activites[i].height*2)){
 			     currentActivity=i;
 				 break;
   } 
@@ -197,12 +197,13 @@ function draw()
 {
  background(255); 
 
+
 		//connecting to prev.
   
 for (var k=1 ;k<activites.length;k++){
 	if(activites[k].previous.length==0){
 		 fill(125,220,31);
-  line(activites[k].x + activites[k].width /2,activites[k].y + activites[k].height/2,activites[0].x + activites[0].width/2,activites[0].y + activites[0].height /2);
+  line(activites[k].x + activites[k].width /2,activites[k].y + activites[k].height,activites[0].x + activites[0].width/2,activites[0].y + activites[0].height/2);
 	}
 	
 	if (activites[k].previous.length!=0) {
@@ -210,7 +211,7 @@ for (var k=1 ;k<activites.length;k++){
 			   for (var z=1 ;z<activites.length;z++){
 					 if (activites[k].previous[l]==activites[z].name){
 						  fill(125,220,31);
-  line(activites[k].x + activites[k].width /2,activites[k].y + activites[k].height/2,activites[z].x + activites[z].width/2,activites[z].y + activites[z].height /2);
+  line(activites[k].x + activites[k].width /2,activites[k].y + activites[k].height,activites[z].x + activites[z].width/2,activites[z].y + activites[z].height);
 	
 					 }
 				 }
@@ -223,7 +224,7 @@ for (var k=1 ;k<activites.length;k++){
 for (var h=1 ;h<activites.length-1;h++){
 	if(activites[h].next.length==0 &&  activites[activites.length -1].duration==101010){
 		 fill(125,220,31);
-  line(activites[h].x + activites[h].width /2,activites[h].y + activites[h].height/2,activites[activites.length -1].x + activites[activites.length -1].width/2,activites[activites.length -1].y + activites[activites.length -1].height /2);
+  line(activites[h].x + activites[h].width /2,activites[h].y + activites[h].height,activites[activites.length -1].x + activites[activites.length -1].width/2,activites[activites.length -1].y + activites[activites.length -1].height/2);
 	}
 	
 	if (activites[h].next.length!=0) {
@@ -231,22 +232,15 @@ for (var h=1 ;h<activites.length-1;h++){
 			for (var v=1 ;v<activites.length;v++){
 					 if (activites[h].next[n]==activites[v].name){
 						  fill(125,220,31);
- line(activites[h].x + activites[h].width /2,activites[h].y + activites[h].height/2,activites[v].x +activites[v].width/2,activites[v].y + activites[v].height /2);			 
+ line(activites[h].x + activites[h].width /2,activites[h].y + activites[h].height,activites[v].x +activites[v].width/2,activites[v].y + activites[v].height);			 
 					 }
 			}
 	}
 	
 }	
 }	
-
-  
-  
-  
-  
-  
-  
-  
-//drawing loop	
+   
+	//drawing loop	
 for (var j=0 ; j<activites.length;j++)
 {
 	if(j==0 ){	
@@ -277,9 +271,20 @@ for (var j=0 ; j<activites.length;j++)
     fill(88,1,67);
     else 
       fill(255,255,255);
-       
-    rect(activites[j].x, activites[j].y, activites[j].width, activites[j].height);
-  
+		
+		var line1x=activites[j].x+(activites[j].width/3);
+		var linesY= activites[j].y +(activites[j].height*2);
+		var line2x=activites[j].x+(2*(activites[j].width/3));
+		
+    
+		rect(activites[j].x, activites[j].y, activites[j].width, activites[j].height);
+		
+		rect(activites[j].x, activites[j].y+ activites[j].height, activites[j].width, activites[j].height);
+   
+		//line 1
+		line(line1x, activites[j].y ,line1x,linesY);
+		//line 2
+	  line(line2x, activites[j].y,line2x, linesY);
     
     if (activites[j].critical==1)
     fill(255);
@@ -288,10 +293,18 @@ for (var j=0 ; j<activites.length;j++)
       
     textSize(20);
 
-	  text(activites[j].name,activites[j].x+20 ,activites[j].y+15,20,20);
-    text(activites[j].duration,activites[j].x+80 ,activites[j].y+15,20,20);
+		text(activites[j].es,activites[j].x+13,activites[j].y+15,20,20);
+	  
+		text(activites[j].name,line1x+13 ,activites[j].y+15,20,20);
+    
+		text(activites[j].ef,line2x+13,activites[j].y+15,20,20);
+		
+		text(activites[j].lf,line2x+13,activites[j].y+activites[j].height+15,20,20);
+		
+		text(activites[j].duration,line1x+13,activites[j].y+activites[j].height+15,20,20);
+		
+		text(activites[j].ls,activites[j].x+13,activites[j].y+activites[j].height+15,20,20);
+		
 }
 }
-
-
 }
